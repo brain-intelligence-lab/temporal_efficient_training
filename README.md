@@ -8,7 +8,7 @@
 
 # Description
  * use a triangle-like surrogate gradient `ZIF` in `models/layer.py` for step function forward and backward.
- * It's very easy to build snn convolution layer by `Layer` in `models/layer.py`. 
+ * It's very easy to build snn convolution layer by `Layer` in `models/layer.py`. \
    `self.conv = nn.Sequential(Layer(2,64,3,1,1),Layer(64,128,3,1,1),)`
  * The 0-th and 1-th dimension of snn layer's input and output are batch-dimension and time-dimension. 
  

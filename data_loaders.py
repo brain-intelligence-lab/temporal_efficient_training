@@ -104,7 +104,7 @@ class DVSCifar10(Dataset):
 def build_dvscifar(path):
     train_path = path + '/train'
     val_path = path + '/test'
-    train_dataset = DVSCifar10(root=train_path, transform=False)
+    train_dataset = DVSCifar10(root=train_path, transform=True)
     val_dataset = DVSCifar10(root=val_path)
 
     return train_dataset, val_dataset

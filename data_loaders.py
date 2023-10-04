@@ -82,8 +82,8 @@ class DVSCifar10(Dataset):
         # print(data.shape)
         # if self.train:
         new_data = []
-        for t in range(data.size(-1)):
-            new_data.append(self.tensorx(self.resize(self.imgx(data[..., t]))))
+        for t in range(data.size(0)):
+            new_data.append(self.tensorx(self.resize(self.imgx(data[t,...]))))
         data = torch.stack(new_data, dim=0)
         if self.transform is not None:
             flip = random.random() > 0.5

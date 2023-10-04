@@ -76,7 +76,8 @@ def events_to_frames(filename, dt):
     for i in range(10):
         r1 = i * (events.shape[0] // 10)
         r2 = (i + 1) * (events.shape[0] // 10)
-        frames[i, events[r1:r2, 3], events[r1:r2, 1], events[r1:r2, 2]] += 1#events[r1:r2, 0]
+        # frames[i, events[r1:r2, 3], events[r1:r2, 1], events[r1:r2, 2]] += 1#events[r1:r2, 0]
+        frames[i，events[r1:r2，5]，events[r:r2，3]，events[r1:r2，4]] += 1
 
     for i in range(10):
         frames[i, :, :, :] = frames[i, :, :, :] / np.max(frames[i, :, :, :])

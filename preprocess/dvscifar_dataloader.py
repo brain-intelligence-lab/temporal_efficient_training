@@ -115,7 +115,7 @@ def create_npy():
             print("\r\tTest data {:.2f}% complete\t\t".format(key / (1 - train_test_portion) / 100), end='')
         frames, labels = events_to_frames(file_d, dt=5000)
         key += 1
-        torch.save([torch.Tensor(frames), torch.Tensor(labels)],
+        torch.save([torch.Tensor(frames), torch.Tensor([labels,])],
                    test_filename.format(key))
     print('\n')
 

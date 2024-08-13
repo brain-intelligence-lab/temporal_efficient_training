@@ -126,7 +126,7 @@ if __name__ == '__main__':
     test_loader = torch.utils.data.DataLoader(val_dataset, batch_size=args.batch_size,
                                               shuffle=False, num_workers=args.workers, pin_memory=True)
 
-    model = VGGSNNwoAP()
+    model = VGGSNN()
 
     parallel_model = torch.nn.DataParallel(model)
     parallel_model.to(device)

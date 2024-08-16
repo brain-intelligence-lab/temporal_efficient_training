@@ -93,7 +93,7 @@ def create_npy():
     if not os.path.exists('dvs-cifar10/test'):
         os.mkdir('dvs-cifar10/test')
 
-    train_test_portion = 0.7
+    train_test_portion = 0.9
 
     fns_train = gather_addr('dvs-cifar10', 0, int(train_test_portion * 1000))
     fns_test = gather_addr('dvs-cifar10', int(train_test_portion * 1000), 1000)

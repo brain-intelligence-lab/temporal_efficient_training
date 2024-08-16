@@ -1,6 +1,9 @@
 import argparse
 import shutil
 import os
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "2,3,6,7"
+
 import time
 import warnings
 import torch.nn as nn
@@ -16,12 +19,11 @@ from models.VGG_models import VGGSNN
 import data_loaders
 from functions import TET_loss, seed_all
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
 
 parser = argparse.ArgumentParser(description='PyTorch Temporal Efficient Training')
 parser.add_argument('-j',
                     '--workers',
-                    default=10,
+                    default=16,
                     type=int,
                     metavar='N',
                     help='number of data loading workers (default: 10)')
@@ -37,7 +39,7 @@ parser.add_argument('--start-epoch',
                     help='manual epoch number (useful on restarts)')
 parser.add_argument('-b',
                     '--batch-size',
-                    default=512,
+                    default=128,
                     type=int,
                     metavar='N',
                     help='mini-batch size (default: 256), this is the total '
@@ -66,7 +68,7 @@ parser.add_argument('--seed',
                     type=int,
                     help='seed for initializing training. ')
 parser.add_argument('--T',
-                    default=2,
+                    default=10,
                     type=int,
                     metavar='N',
                     help='snn simulation time (default: 2)')
@@ -81,10 +83,15 @@ parser.add_argument('--TET',
                     metavar='N',
                     help='if use Temporal Efficient Training (default: True)')
 parser.add_argument('--lamb',
-                    default=0.0,
+                    default=0.0001,
                     type=float,
                     metavar='N',
                     help='adjust the norm factor to avoid outlier (default: 0.0)')
+parser.add_argument('--path',
+                    default='/data_smr/dataset/cifar10-dvs',
+                    type=str,
+                    metavar='N',
+                    help='path to the dataset')
 args = parser.parse_args()
 
 
@@ -121,12 +128,12 @@ def main_worker(local_rank, nprocs, args):
                             world_size=args.nprocs,
                             rank=local_rank)
     load_names = None
-    save_names = None
+    save_names = 'VGGSNN_CIFAR10DVS.pth'
 
     # load_names = 'dvs-cifar1048_V1_D05_VGGSNN_distribute_ensemble_gama05.pth'
     # save_names = 'dvs-cifar1048_V1_D05_VGG11SNN_distribute_ensemble_gamad.pth'
 
-    model = resnet19()
+    model = VGGSNN()
     model.T = args.T
 
     if load_names != None:
@@ -154,8 +161,8 @@ def main_worker(local_rank, nprocs, args):
     cudnn.benchmark = True
 
     # Data loading code
-    train_dataset, val_dataset = data_loaders.build_cifar(use_cifar10=True)
-    # train_dataset, val_dataset = data_loaders.build_dvscifar()
+    # train_dataset, val_dataset = data_loaders.build_cifar(use_cifar10=True)
+    train_dataset, val_dataset = data_loaders.build_dvscifar(args.path)
     train_sampler = torch.utils.data.distributed.DistributedSampler(
         train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset,
@@ -385,3 +392,4 @@ def accuracy(output, target, topk=(1,)):
 
 if __name__ == '__main__':
     main()
+    # python main_training_distribute.py
